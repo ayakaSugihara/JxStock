@@ -6,11 +6,15 @@
         prism:ViewModelLocator.AutoWireViewModel="True"
         Title="{Binding Title.Value, Mode=TwoWay}">
     <Grid>
+        <Grid.Resources>
+            <ResourceDictionary Source="/JxStock;component/Properties/StyleDictionary.xaml"/>
+        </Grid.Resources>
         <TabControl>
             <TabItem Header="マスタ管理">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
+                        <RowDefinition Height="10"/>
                         <RowDefinition Height="2*"/>
                     </Grid.RowDefinitions>
                     <Grid Grid.Row="0">
@@ -28,26 +32,10 @@
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <Grid.Resources>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                                <Setter Property="HorizontalAlignment" Value="Center"/>
-                            </Style>
-                            <Style TargetType="TextBox">
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                            </Style>
-                            <Style TargetType="Button">
-                                <Setter Property="Height" Value="25"/>
-                                <Setter Property="Width" Value="40"/>
-                            </Style>
-                            <Style TargetType="ComboBox">
-                                <Setter Property="Height" Value="25"/>
-                            </Style>
-                        </Grid.Resources>
                         <TextBlock Text="名前" Grid.Row="0" Grid.Column="0"/>
                         <TextBox Text="{Binding Name.Value, Mode=TwoWay}" Grid.Row="0" Grid.Column="1"/>
                         <TextBlock Text="区分" Grid.Row="0" Grid.Column="2"/>
-                        <ComboBox Grid.Row="0" Grid.Column="3" Text="{Binding Category.Value}">
+                        <ComboBox Grid.Row="0" Grid.Column="3" Text="{Binding Category.Value}" SelectedIndex="{Binding CategoryIndex.Value}">
                             <ComboBoxItem Content="宝石"/>
                             <ComboBoxItem Content="金具"/>
                             <ComboBoxItem Content="アートフラワー"/>
@@ -72,18 +60,27 @@
                         <TextBox Text="{Binding UnitPrice.Value, Mode=TwoWay}" Grid.Row="1" Grid.Column="5"/>
                         <TextBlock Text="画像" Grid.Row="2" Grid.Column="0"/>
                         <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="5">
-                            <Button Content="添付" Margin="0,0,20,0"/>
-                            <TextBlock Text="{Binding ImagePath.Value, Mode=TwoWay}" HorizontalAlignment="Left"/>
+                            <Button Content="添付" Command="{Binding AttachImageCommand}" Margin="0,0,20,0"/>
+                            <TextBlock Text="{Binding ImagePath.Value, Mode=TwoWay}" HorizontalAlignment="Left" Margin="0,0,20,0"/>
+                            <Image Source="{Binding ImageSource.Value}"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="6">
                             <Button Content="登録" Command="{Binding RegistCommand}" Margin="15,0,0,0"/>
                             <Button Content="削除" Command="{Binding DeleteCommand}" Margin="15,0,15,0"/>
                         </StackPanel>
                     </Grid>
-                    <DataGrid Grid.Row="1" ItemsSource="{Binding DataList}" AutoGenerateColumns="False" SelectedIndex="{Binding Index.Value}">
+                    <GridSplitter Grid.Row="1" ResizeDirection="Rows" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,3,0,3"/>
+                    <DataGrid Grid.Row="2" ItemsSource="{Binding DataList, Mode=TwoWay}" SelectedIndex="{Binding Index.Value}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="SelectionChanged">
+                                <cmd:EventToCommand Command="{Binding MasterItemSelectedChangeCommand}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="名前" Binding="{Binding Name}"/>
                             <DataGridTextColumn Header="区分" Binding="{Binding Category}"/>
+                            <DataGridTextColumn Header="値段" Binding="{Binding Price}"/>
+                            <DataGridTextColumn Header="個数" Binding="{Binding Quantity}"/>
                             <DataGridTextColumn Header="単価" Binding="{Binding UnitPrice}"/>
                             <DataGridTextColumn Header="画像ファイル名" Binding="{Binding ImagePath}"/>
                         </DataGrid.Columns>

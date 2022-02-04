@@ -7,8 +7,6 @@ namespace JxStock.Models
     public static class DataBaseManager
     {
         private static string DatabasePath= System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), @"db\Stock.db");
-        //private readonly string ConnectionString = null;
-        //private readonly string DataBaseFilePath = AppDomain.CurrentDomain.BaseDirectory + DatabasePath;
 
         /// <summary>
         /// 在庫を登録する

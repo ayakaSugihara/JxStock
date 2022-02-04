@@ -13,6 +13,16 @@ namespace JxStock.Models
         public string Name { get; set; }
 
         /// <summary>
+        /// 金額
+        /// </summary>
+        public double Price { get; set; }
+
+        /// <summary>
+        /// 個数
+        /// </summary>
+        public double Quantity { get; set; }
+
+        /// <summary>
         /// 単価
         /// </summary>
         public double UnitPrice { get; set; }
