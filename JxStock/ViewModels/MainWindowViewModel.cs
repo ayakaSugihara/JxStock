@@ -18,6 +18,7 @@ namespace JxStock.ViewModels
         public ReactiveProperty<double> UnitPrice { get; } = new ReactiveProperty<double>();
         public ReactiveProperty<string> ImagePath { get; } = new ReactiveProperty<string>();
         public ReactiveProperty<string> Category { get; } = new ReactiveProperty<string>();
+        public ReactiveProperty<int> Index { get; } = new ReactiveProperty<int>(-1);
 
         private List<Stocks> _dataList = new List<Stocks>();
         public List<Stocks> DataList
@@ -26,12 +27,18 @@ namespace JxStock.ViewModels
             set { SetProperty(ref _dataList, value); }
         }
 
+        /// <summary>
+        /// 画像の保存先
+        /// </summary>
+        private readonly string ImageFolder = @".Image/";
+
         #endregion
 
         #region command
 
         public ReactiveCommand UpdateUnitPriceCommand { get; } = new ReactiveCommand();
         public ReactiveCommand RegistCommand { get; } = new ReactiveCommand();
+        public ReactiveCommand DeleteCommand { get; } = new ReactiveCommand();
 
         #endregion
 
@@ -39,6 +46,7 @@ namespace JxStock.ViewModels
         {
             UpdateUnitPriceCommand.Subscribe(_ => UpdateUnitPrice());
             RegistCommand.Subscribe(_ => RegistStocks());
+            DeleteCommand.Subscribe(_ => DeleteStocks());
             DataList = DataBaseManager.Select();
         }
 
@@ -57,7 +65,42 @@ namespace JxStock.ViewModels
                     Category = Category.Value,
                 };
 
-                DataBaseManager.Regist(stock);
+                if (Index.Value < 0)
+                {
+                    DataBaseManager.Insert(stock);
+                }
+                else
+                {
+                    var data = DataList[Index.Value];
+                    stock.Id = data.Id;
+                    DataBaseManager.Update(stock);
+                }
+
+                DataList = DataBaseManager.Select();
+                Index.Value = -1;
+            }
+            catch (Exception ex)
+            {
+                CatchException(ex);
+            }
+        }
+
+        /// <summary>
+        /// 在庫の削除
+        /// </summary>
+        private void DeleteStocks()
+        {
+            if (Index.Value < 0)
+            {
+                return;
+            }
+
+            try
+            {
+                var stock = DataList[Index.Value];
+                DataBaseManager.Delete(stock.Id);
+                DataList = DataBaseManager.Select();
+                Index.Value = -1;
             }
             catch (Exception ex)
             {

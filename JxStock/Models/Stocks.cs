@@ -23,7 +23,7 @@ namespace JxStock.Models
         public string ImagePath { get; set; }
 
         /// <summary>
-        /// 区分
+        /// 画像ファイル名
         /// </summary>
         public string Category { get; set; }
     }

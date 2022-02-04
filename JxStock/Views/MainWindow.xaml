@@ -47,7 +47,7 @@
                         <TextBlock Text="名前" Grid.Row="0" Grid.Column="0"/>
                         <TextBox Text="{Binding Name.Value, Mode=TwoWay}" Grid.Row="0" Grid.Column="1"/>
                         <TextBlock Text="区分" Grid.Row="0" Grid.Column="2"/>
-                        <ComboBox Grid.Row="0" Grid.Column="3" SelectedItem="{Binding Category.Value}">
+                        <ComboBox Grid.Row="0" Grid.Column="3" Text="{Binding Category.Value}">
                             <ComboBoxItem Content="宝石"/>
                             <ComboBoxItem Content="金具"/>
                             <ComboBoxItem Content="アートフラワー"/>
@@ -75,10 +75,18 @@
                             <Button Content="添付" Margin="0,0,20,0"/>
                             <TextBlock Text="{Binding ImagePath.Value, Mode=TwoWay}" HorizontalAlignment="Left"/>
                         </StackPanel>
-                        <Button Content="登録" Command="{Binding RegistCommand}" Grid.Row="3" Grid.Column="0"/>
+                        <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="6">
+                            <Button Content="登録" Command="{Binding RegistCommand}" Margin="15,0,0,0"/>
+                            <Button Content="削除" Command="{Binding DeleteCommand}" Margin="15,0,15,0"/>
+                        </StackPanel>
                     </Grid>
-                    <DataGrid Grid.Row="1" ItemsSource="{Binding DataList}" AutoGenerateColumns="True">
-                        
+                    <DataGrid Grid.Row="1" ItemsSource="{Binding DataList}" AutoGenerateColumns="False" SelectedIndex="{Binding Index.Value}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="名前" Binding="{Binding Name}"/>
+                            <DataGridTextColumn Header="区分" Binding="{Binding Category}"/>
+                            <DataGridTextColumn Header="単価" Binding="{Binding UnitPrice}"/>
+                            <DataGridTextColumn Header="画像ファイル名" Binding="{Binding ImagePath}"/>
+                        </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
             </TabItem>

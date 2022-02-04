@@ -11,15 +11,28 @@ namespace JxStock.Models
         //private readonly string DataBaseFilePath = AppDomain.CurrentDomain.BaseDirectory + DatabasePath;
 
         /// <summary>
-        /// 在庫を登録・更新する
+        /// 在庫を登録する
         /// </summary>
         /// <param name="stock"></param>
-        public static void Regist(Stocks stock)
+        public static void Insert(Stocks stock)
         {
             using (var connection = new SQLiteConnection(DatabasePath))
             {
                 connection.CreateTable<Stocks>();
-                connection.InsertOrReplace(stock);
+                connection.Insert(stock);
+            }
+        }
+
+        /// <summary>
+        /// 在庫を更新する
+        /// </summary>
+        /// <param name="stock"></param>
+        public static void Update(Stocks stock)
+        {
+            using (var connection = new SQLiteConnection(DatabasePath))
+            {
+                connection.CreateTable<Stocks>();
+                connection.Update(stock);
             }
         }
 
@@ -37,6 +50,18 @@ namespace JxStock.Models
                 List<Stocks> list = connection.Query<Stocks>(query);
 
                 return list;
+            }
+        }
+
+        /// <summary>
+        /// 在庫を登録・更新する
+        /// </summary>
+        /// <param id="削除する在庫のキー"></param>
+        public static void Delete(int id)
+        {
+            using (var connection = new SQLiteConnection(DatabasePath))
+            {
+                connection.Delete<Stocks>(id);
             }
         }
     }
